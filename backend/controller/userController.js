@@ -8,7 +8,7 @@ const authUser = asyncHandler(async (req, res) => {
   console.log("req body", req.body);
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    generateToken(res, user._id,'jwt');
     res.status(201).json({
       _id: user._id,
       name: user.name,
