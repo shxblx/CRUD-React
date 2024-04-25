@@ -1,39 +1,80 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
-import store from "./store";
-import { Provider } from "react-redux";
-import App from "./App.jsx";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.css";
-import HomeScreen from "./screens/HomeScreen.jsx";
-import LoginScreen from "./screens/LoginScreen.jsx";
-import RegisterScreen from "./screens/RegisterScreen.jsx";
-import ProfileScreen from "./screens/ProfileScreen.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
+  RouterProvider
+} from 'react-router-dom'
+import store from './store.js'
+import { Provider } from 'react-redux'
+import './index.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+// user components
+import SignUp from './screens/userScreen/SignUp.jsx'
+import Login from './screens/userScreen/Login.jsx'
+import HomeScreen from './screens/userScreen/HomeScreen.jsx'
+import Profile from './screens/userScreen/Profile.jsx'
+import PrivateRoute from './components/userComponent/PrivateRoute.jsx'
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<HomeScreen />} />
-      <Route path="/login" element={<LoginScreen />} />
-      <Route path="/register" element={<RegisterScreen />} />
-      <Route path="" element={<PrivateRoute />}>
-        <Route path="/profile" element={<ProfileScreen />} />
-      </Route>
-    </Route>
-  )
-);
+// admin components
+import AdminLogin from './screens/adminScreen/AdminLogin.jsx'
+import AdminPrivateRoute from './components/adminComponent/AdminPrivateRoute.jsx'
+import Admin from './screens/adminScreen/Admin.jsx'
+import AdminHome from './screens/adminScreen/AdminHome.jsx'
+import AdminDashboard from './screens/adminScreen/AdminDashboard.jsx'
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <SignUp />
+  },
+  {
+    path: '',
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: '/profile',
+        element: <Profile />
+
+      },
+      {
+        path: '/home',
+        element: <HomeScreen />
+      }
+    ]
+  },
+
+  // Admin Side
+  {
+    path: '/admin',
+    element: <AdminLogin />
+  },
+  {
+    path: '/admin',
+    element: <AdminPrivateRoute><Admin /></AdminPrivateRoute>,
+    children: [
+      {
+        path: 'home',
+        element: <AdminHome />
+      },
+      {
+        path: 'dashboard',
+        element: <AdminDashboard />
+      }
+    ]
+  },
+])
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <React.StrictMode>
+      <ToastContainer autoClose={1000} />
       <RouterProvider router={router} />
     </React.StrictMode>
   </Provider>
-);
+)
